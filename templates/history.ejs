@@ -1,0 +1,98 @@
+<!--<%if (filter && Object.keys(filter).length > 0){%> -->
+<nav class="nav">
+    <a class="nav-link disabled" href="#">Enabled filter</a>
+    <%
+        Object.keys(filter).forEach(function(key){
+        %>
+        <a class="nav-link active" href="#">
+            <%=key +": "+filter[key]%>
+        </a>
+        <%
+        })
+            %>
+
+            <a class="nav-link" onclick='return send("app.render", {view: "history"});' href="#">disable all filters</a>
+</nav>
+<!-- <%}%> -->
+
+<!--
+<%
+
+    var date2s = function(timestamp){
+        var date = new Date(timestamp * 1000);
+        return  ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+    }
+
+    var truncate = function(str, len){
+        return str.slice(0, len).trim();
+    }
+
+%>
+-->
+
+<table class='table table-bordered'>
+
+    <tr>
+        <th>Tx info</th>
+        <th>Amount</th>
+        <th>Balance</th>
+        <th>Description</th>
+    </tr>
+
+    <!-- <% history.forEach(function(item){ %> -->
+    <tr>
+        <td>
+            <!-- <%if (item.unconfirmed || item.height  == -1){%> -->
+            <i title='unconfirmed' class='fa fa-circle-thin conf-0'></i>
+            <!--<%}else{%>-->
+            <!-- <%confirmation=top.height - item.height +1 %> -->
+
+            <!-- <%if (confirmation < 3){%> -->
+            <i title='<%=confirmation%> confirmation' class='fa fa-circle conf-1'></i>
+            <!--<%}else if (confirmation >= 3 && confirmation < 6){%>-->
+            <i title='<%=confirmation%> confirmation' class='fa fa-circle conf-3'></i>
+            <!--<%}else{%>-->
+            <i title='<%=confirmation%> confirmation' class='fa fa-circle conf-6'></i>
+            <!--<%}%>-->
+
+            <!--<%}%>-->
+
+            <!--<% if (!item.spent && !item.spentHash) {%> -->
+            <i title='<%if (item.coinbase){%>mining reward<%}else{%>input coins<%}%>' class='fa <%if (item.coinbase){%>fa-sitemap<%}else{%>fa-arrow-circle-o-left<%}%> green'></i>
+            <!--<% } else{ %>-->
+            <i title='output coins' class='fa fa-arrow-circle-o-right red'></i>
+            <!--<%}%>-->
+            <a href='#' onclick='return send("popup.open", {name: "txbody", hash: "<%=(item.spent && item.spentHash)?item.spentHash:item.tx%>"});'>
+                <%=truncate((item.spent && item.spentHash)?item.spentHash:item.tx, 8)+"..."%>
+            </a>
+            <br />
+            <span class='muted'><i class='fa fa-clock-o'></i> <%= date2s((item.spent && item.spentHash)?item.spentTime:item.added) %></span>
+        </td>
+        <td>
+            <!--<% if (!item.spent && !item.spentHash) {%>-->
+            <span class='green'>
+                    +<%=parseFloat(item.amount/1e8).toFixed(9)%>
+                    </span>
+            <!--<%}else{%>-->
+            <span class='red'>
+                    -<%=parseFloat(item.amount/1e8).toFixed(9)%>
+                    </span>
+            <!--<%}%>-->
+            <div class='muted'>
+                <i class='fa fa-map-marker'></i>
+                <a href='#' onclick='return send("app.render", {view: "history", address: "<%=item.address%>"});'>
+                    <%=item.address%>
+                </a>
+            </div>
+        </td>
+        <td>
+            <%=parseFloat(item.balance).toFixed(9)%>
+        </td>
+        <td>
+
+        </td>
+    </tr>
+
+    <!-- <% }) %> -->
+
+</table>

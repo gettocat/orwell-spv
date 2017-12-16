@@ -1,0 +1,117 @@
+    body {
+        cursor: pointer
+    }
+    
+    .block {
+        margin-bottom: 20px;
+        background-color: #e9ecef;
+        padding: 8px
+    }
+    
+    .block:nth-child(even) {
+        background-color: #fff;
+    }
+    
+    .hide {
+        display: none
+    }
+    
+    .red {
+        color: red
+    }
+    
+    .redborder {
+        border-color: red;
+    }
+    
+    .green {
+        color: green
+    }
+    
+    .yellow {
+        color: yellow
+    }
+    
+    .gray {
+        color: #aaa;
+    }
+    
+    .content-container {
+        min-height: 700px;
+    }
+    
+    .black {
+        background-color: #343a40;
+        color: #fff;
+    }
+    
+    .no-scoll-x,
+    body {
+        overflow-x: hidden;
+    }
+    
+    #content {
+        padding: 5px;
+    }
+    
+    .no-scoll-y {
+        overflow-y: hidden;
+    }
+    
+    .muted,
+    .muted a,
+    .muted a:link,
+    .muted a:hover {
+        color: #aaa;
+        font-size: 10px;
+    }
+    
+    @media (max-width:640px) {
+        .form-content {
+            margin-left: 30px;
+        }
+    }
+    
+    .col-form-label {
+        font-weight: 600;
+    }
+    
+    .tx-vectors {
+        padding: 5px;
+        margin-bottom: 20px;
+    }
+    
+    .tx-vectors:hover {
+        background-color: #eee
+    }
+    
+    table.table th a.btn,
+    table.table th a.btn:hover,
+    table.table td a.btn,
+    table.table td a.btn:hover {
+        color: white
+    }
+    
+    .conf-0 {
+        color: #aaa;
+    }
+    
+    .conf-1 {
+        color: rgba(250, 156, 156, 0.568);
+    }
+    
+    .conf-3 {
+        color: rgba(228, 240, 71, 0.568);
+    }
+    
+    .conf-6 {
+        color: rgba(0, 128, 0, 0.562)
+    }
+    
+    .nav-tabs {
+        margin-bottom: 20px;
+    }
+    
+    .table-small {
+        font-size: 11px;
+    }

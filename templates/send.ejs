@@ -1,0 +1,189 @@
+<script>
+    window.addEventListener('response.validate.address', function(event, data) {
+        console.log('isValidAddress', event.detail)
+        var st = $("#address").closest('.form-group').find(".status");
+
+        if (event.detail.isValid) {
+            st.html("<i class='fa fa-check green'></i>");
+            $("#send-pane").removeClass('hide')
+        } else {
+            st.html("<i class='fa fa-times red'></i>");
+            $("#send-pane").addClass('hide')
+        }
+
+    })
+
+    window.addEventListener('response.validate.amount', function(event, data) {
+        console.log('isValidAmount', event.detail)
+        var st = $("#amount").closest('.form-group').find(".status");
+
+        if (event.detail.isValid) {
+            st.html("<i class='fa fa-check green'></i>");
+            $("#send-pane").removeClass('hide')
+        } else {
+            st.html("<i class='fa fa-times red'></i>");
+            $("#send-pane").addClass('hide')
+        }
+
+    })
+
+    window.addEventListener('response.validate.utxo', function(event, data) {
+        console.log('isValidUtxo', event.detail)
+        var st = $("#utxo").closest('.form-group').find(".status");
+        var st2 = $("#amount").closest('.form-group').find(".status");
+
+        if (event.detail.isValid) {
+
+            if (event.detail.isValidAmount) {
+                st.html("<i class='fa fa-check green'></i>");
+                $("#send-pane").removeClass('hide');
+                st2.html("<i class='fa fa-check green'></i>");
+            } else {
+                st.html("<i class='fa fa-times red'></i> have " + parseFloat(event.detail.aval_amount).toFixed(2) + " need " + parseFloat(event.detail.amount).toFixed(2));
+                $("#send-pane").addClass('hide');
+                st2.html("<i class='fa fa-times red'></i>");
+            }
+
+        } else {
+            st.html("<i class='fa fa-times red'></i> have no unspended coins");
+            $("#send-pane").addClass('hide')
+        }
+
+    });
+
+
+    function createPreviewWindow(show) {
+
+        let fee = 10;
+        if ($("#fee_medium").prop("checked"))
+            fee = 20;
+        if ($("#fee_large").prop("checked"))
+            fee = 50;
+
+        let data = {
+            to: $("#address").val(),
+            amount: parseFloat($("#amount").val()).toFixed(9),
+            from: $("#utxo").val(),
+            description: $("#description").val(),
+            fee: fee
+        }
+
+        console.log("debug", data);
+
+        if (!data.to || !data.from || !data.amount)
+            return false;
+
+        if (show)
+            send('txbody', data);
+        return data;
+
+    }
+
+    function sendTransaction() {
+        let data = createPreviewWindow(false)
+        send('tx.send', data);
+    }
+</script>
+
+
+<form class='no-scoll-y no-scoll-x'>
+
+    <div class='form-group row'>
+
+        <div class='col-12 col-sm-2 col-form-label'>
+            Send to
+        </div>
+        <div class='col-8 offset-2 col-sm-8 form-content'>
+            <input id='address' type='text' class='form-control' value='' onkeyup="send('validate.address', {field: '#address', value: this.value})">
+        </div>
+        <div class='col-2 status'></div>
+
+    </div>
+
+    <div class='form-group row'>
+
+        <div class='col-12 col-sm-2 col-form-label'>
+            Amount
+        </div>
+        <div class='col-8 offset-2 col-sm-8 form-content'>
+            <input id='amount' type='number' class='form-control' value='' onkeyup="send('validate.amount', {field: '#amount', value: this.value});$('#utxo').change()">
+        </div>
+        <div class='col-2 status'></div>
+
+    </div>
+
+    <div class='form-group row'>
+
+        <div class='col-12 col-sm-2 col-form-label'>
+            Send from
+        </div>
+        <div class='col-6 offset-2 col-sm-6 form-content'>
+            <select id='utxo' onchange="send('validate.utxo', {field: '#utxo', value: this.value, amount: $('#amount').val()});" class="custom-select">
+                <option value='0' selected>Any</option>
+                <!-- <%for (var i in sorted){%> -->
+                <!-- <% let a = utxo[sorted[i]].stats.unspent_amount - utxo[sorted[i]].stats.spent_amount%> -->
+                <!-- <%if (a > 0){%> -->
+                <option value="<%=sorted[i]%>"><%=sorted[i]%> ( <%=parseFloat(a/1e8).toFixed(9)%> orwl )</option>
+                <!-- <%}%> -->
+                <!-- <%}%> -->
+            </select>
+        </div>
+        <div class='col-4 status'></div>
+
+    </div>
+
+    <div class='form-group row'>
+
+        <div class='col-12 col-sm-2 col-form-label'>
+            Description
+        </div>
+        <div class='col-10 offset-2 col-sm-10 form-content'>
+            <textarea id='description' class='form-control'></textarea>
+        </div>
+
+    </div>
+
+    <div class='form-group row'>
+
+        <div class='col-12 col-sm-2 col-form-label'>
+            Fee
+        </div>
+        <div class='col-10 offset-2 col-sm-10 form-content'>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="fee" id="fee_small" value="1" checked>
+                    Small - 10 sat/byte
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="fee" id="fee_medium" value="1">
+                    Medium - 20 sat/byte
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="fee" id="fee_large" value="1">
+                    Large - 50 sat/byte
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+    <div id='send-pane' class='form-group row'>
+        <div class='col-12 col-sm-2 col-form-label'>
+
+        </div>
+        <div class='col-10 offset-2 col-sm-10 form-content'>
+
+            <button type="button" onclick='return sendTransaction(true)' type="button" type="button" onclick=' ' class='btn btn-success'><i class='fa fa-paperplane'></i> Send</button>
+            <button type="button" onclick='return createPreviewWindow()' class='btn btn-primary'><i class='fa fa-eye'></i> Preview</button>
+
+        </div>
+
+    </div>
+
+
+
+</form>

@@ -1,0 +1,47 @@
+<!--
+<%
+
+    var date2s = function(timestamp){
+        var date = new Date(timestamp * 1000);
+        return  ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+    }
+
+    var truncate = function(str, len){
+        return str.slice(0, len).trim();
+    }
+
+%>
+-->
+
+<table class='table table-small'>
+    <tr>
+        <th>Node</th>
+        <th>Last msg</th>
+        <th>Ping (sec)</th>
+        <th>Recv / sent (kb)</th>
+        <th>Height</th>
+    </tr>
+    <!-- <% for (var i in nodes){ %> -->
+    <tr>
+        <td>
+            <%=nodes[i].rinfo.remoteAddress+":"+nodes[i].rinfo.port%>
+                <div class='muted'>
+                    <% let parts = nodes[i].agent.split("/")%>
+                        <%=parts[0]+" / "+parts[3]+" / "+parts[2]%>
+                </div>
+        </td>
+        <td>
+            <%=date2s(nodes[i].lastRecv)%>
+        </td>
+        <td>
+            <%=parseFloat(nodes[i].pingTime).toFixed(2)%>
+        </td>
+        <td>
+            <%=parseFloat(nodes[i].recvBytes/1000).toFixed(2) +" / "+parseFloat(nodes[i].sentBytes/1000).toFixed(2)%>
+        </td>
+        <td>
+            <%=nodes[i].top.height%>
+        </td>
+    </tr>
+    <!-- <%}%> -->
+</table>

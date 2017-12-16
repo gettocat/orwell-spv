@@ -1,0 +1,36 @@
+<table class='table table-bordered'>
+    <tr>
+        <th>
+            Address <a title='create new address' onclick='return send("popup.open", {name: "addresscreatepopup"})' class='btn btn-sm btn-success'><i class='fa fa-plus'></i></a>
+            <a title='import address by wif/privateKey' onclick='return send("popup.open", {name: "addressimportpopup"})' class='btn btn-sm btn-primary'><i class='fa fa-download'></i></a>
+            <a title='exports all keys' onclick='return send("dialog.open", {name: "exportkeys"})' class='btn btn-sm btn-primary'><i class='fa fa-cloud-upload'></i></a>
+            <a title='import keys' onclick='return send("dialog.open", {name: "importkeys"})' class='btn btn-sm btn-primary'><i class='fa fa-cloud-download'></i></a>
+        </th>
+        <th>Label</th>
+        <th>Balance</th>
+        <th>Tx count</th>
+        <th>#</th>
+    </tr>
+    <% list.forEach(function(addr){ %>
+        <tr>
+            <td class='muted'>
+                <i class='fa fa-map-marker'></i>
+                <a title='show history for this address' href='#' onclick='return send("app.render", {view: "history", address: "<%=addr.address%>"});'>
+                    <%=addr.address%>
+                </a>
+            </td>
+            <td>
+                <%=addr.label%>
+            </td>
+            <td>
+                <%=(utxoIndex[addr.address].stats.unspent_amount - utxoIndex[addr.address].stats.spent_amount)/1e8%>
+            </td>
+            <td>
+                <%=utxoIndex[addr.address].stats.unspent_inputs + utxoIndex[addr.address].stats.spent_inputs%>
+            </td>
+            <td>
+                <a title='export key for address <%=addr.address%>' onclick='return send("dialog.open", {name: "exportkey", address: "<%=addr.address%>"})' class='btn btn-sm btn-primary'><i class='fa fa-upload'></i></a>
+            </td>
+        </tr>
+        <% }) %>
+</table>
