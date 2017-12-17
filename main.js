@@ -41,7 +41,7 @@ function createWindow() {
   mainWindow.setMenu(null);
   require("./app/menu")();
 
-  tray = new Tray(__dirname+'/views/assets/img/icon.jpg')//'/path/to/my/icon'
+  tray = new Tray(__dirname+'/views/assets/img/icon.png')//'/path/to/my/icon'
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show', click() { mainWindow.show(), mainWindow.focus() } },
     { label: 'Exit', click() { willQuitApp = true, app.quit() } },

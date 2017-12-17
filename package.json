@@ -5,7 +5,8 @@
     "main": "main.js",
     "scripts": {
         "start": "electron .",
-        "dist": "build -wl"
+        "dist-windows": "build -w",
+        "dist-linux": "build -l"
     },
     "repository": "https://github.com/gettocat/orwell-spv",
     "homepage": "http://orwellcoin.org",
@@ -54,11 +55,50 @@
                 }
             ]
         },
+        "win": {
+            "target": [{
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "portable",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "msi",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                }
+            ],
+            "icon": "build/icon.ico",
+            "legalTrademarks": "© 2017 Nanocat",
+            "publisherName": "Orwell coin"
+
+        },
         "linux": {
-            "category": "db",
-            "target": [
-                "appImage",
-                "tar.gz"
+            "category": "Utility",
+            "target": [{
+                    "target": "appImage",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "tar.gz",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                }
             ],
             "synopsis": "Orwell spv wallet"
         }
